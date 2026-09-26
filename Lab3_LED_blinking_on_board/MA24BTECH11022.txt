@@ -1,0 +1,41 @@
+.section .data             
+on: .word 100000  
+off: .word 100000
+
+.section .text 
+.global main  
+main: 
+
+    la x3, on
+    la x4, off
+
+    li x5, 0x10012004
+    addi x6, x0, 0x00000000
+    sw x6, 0(x5)
+
+    li x5, 0x10012008
+    addi x6, x0, 0x00000020 
+    sw x6, 0(x5)
+
+    while_true:
+
+        li x5, 0x1001200C
+        addi x6, x0, 0x00000020
+        sw x6, 0(x5)
+
+        lw x6, 0(x3)
+
+        on_loop:
+            addi x6, x6, -1
+            bnez x6, on_loop
+
+        addi x6, x0, 0x00000000
+        sw x6, 0(x5)
+
+        lw x6, 0(x4)
+
+        off_loop:
+            addi x6, x6, -1
+            bnez x6, off_loop
+
+        j while_true
